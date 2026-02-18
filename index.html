@@ -108,10 +108,9 @@
 
     .slider img {
       flex-shrink: 0; width: 280px; height: 200px; object-fit: cover; border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1); opacity: 0;
-      transition: opacity 0.5s ease, transform 0.3s ease; cursor: pointer; border: 4px solid #95E1D3;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1); opacity: 1;
+      transition: transform 0.3s ease; cursor: pointer; border: 4px solid #95E1D3;
     }
-    .slider img.loaded { opacity: 1; }
     .slider img:hover { transform: scale(1.05); border-color: #FFE66D; }
 
     .slider-nav {
@@ -333,49 +332,27 @@
 </footer>
 
 <script>
-// Dynamically load images from img folder
-async function loadGalleryImages() {
+// Dynamically load images from img folder - fast version
+function loadGalleryImages() {
   const slider = document.getElementById('gallerySlider');
-  const maxImages = 100; // Check up to 100 images
+  const maxImages = 100;
   
-  // We'll try to load images 1, 2, 3... and check if they exist
+  // Simple approach: try to load images directly, stop when one fails
   for (let i = 1; i <= maxImages; i++) {
     const img = document.createElement('img');
-    const imgSrc = `img/${i}.jpeg`;
-    
-    // Check if image exists by trying to load it
-    try {
-      const response = await fetch(imgSrc, { method: 'HEAD' });
-      if (response.ok) {
-        img.dataset.src = imgSrc;
-        img.alt = 'תמונה מהגן';
-        img.onclick = function() { openLightbox(this); };
-        slider.appendChild(img);
-      }
-    } catch (e) {
-      // Image doesn't exist, stop checking
-      break;
-    }
+    img.src = `img/${i}.jpeg`;
+    img.alt = 'תמונה מהגן';
+    img.onclick = function() { openLightbox(this); };
+    img.onerror = function() {
+      // Image doesn't exist, remove it and stop
+      slider.removeChild(img);
+    };
+    img.onload = function() {
+      // Image loaded successfully
+      img.classList.add('loaded');
+    };
+    slider.appendChild(img);
   }
-  
-  // Initialize lazy loading for dynamically added images
-  initLazyLoading();
-}
-
-function initLazyLoading() {
-  const lazyImages = document.querySelectorAll("#gallerySlider img[data-src]");
-  const imageObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const img = entry.target;
-        const newImg = new Image();
-        newImg.src = img.dataset.src;
-        newImg.onload = () => { img.src = newImg.src; img.classList.add("loaded"); observer.unobserve(img); };
-        newImg.onerror = () => { img.style.backgroundColor = "#f0f0f0"; observer.unobserve(img); };
-      }
-    });
-  }, { rootMargin: '50px 0px', threshold: 0.1 });
-  lazyImages.forEach(img => imageObserver.observe(img));
 }
 
 // Load images when page loads
