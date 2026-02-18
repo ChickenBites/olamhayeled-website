@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>עולם הילד – משפחתון ביתי בגישה התפתחותית־תנועתית</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="משפחתון ביתי לגילאי 3 חודשים ומעלה, עד 6 תינוקות בלבד. ליווי והדרכה התפתחותית־תנועתית מקצועית, תזונה ביתית ובריאה, וקבוצה קטנה ואינטימית." />
+  <meta name="keywords" content="משפחתון, גננות, טיפול התפתחותי, תינוקות, משפחתון ביתי, שירה" />
+  <meta name="author" content="שירה" />
+  <meta name="robots" content="index, follow" />
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Alef","Assistant",Arial,sans-serif; }
+    body { background: #FFF9E6; color: #5D4037; line-height: 1.6; scroll-behavior: smooth; }
+    a { text-decoration: none; color: inherit; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 1.5rem; position: relative; }
+
+    header {
+      background: linear-gradient(135deg, #FF6B6B, #FFE66D, #4ECDC4, #95E1D3);
+      background-size: 300% 300%;
+      animation: rainbow 10s ease infinite;
+      padding: 2.5rem 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .logo-title { text-align: center; margin: 0 auto; max-width: 80%; }
+    .logo-title h1 { font-size: 2.1rem; color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); animation: fadeIn 1s ease; }
+    .logo-title p { font-size: 1.05rem; color: #fff; font-weight: 500; text-shadow: 1px 1px 3px rgba(0,0,0,0.2); animation: fadeIn 1.3s ease; }
+
+    .hero-actions { display: flex; gap: 0.75rem; margin-top: 0.5rem; flex-wrap: wrap; animation: fadeIn 1.6s ease; justify-content: center; }
+    .btn { padding: 0.7rem 1.4rem; border-radius: 25px; font-weight: 600; cursor: pointer; border: none; transition: transform 0.2s, box-shadow 0.2s; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .btn-primary { background: #FF6B6B; color: #fff; }
+    .btn-outline { border: 2px solid #fff; color: #fff; background: transparent; }
+
+    .hamburger {
+      font-size: 2rem; cursor: pointer; position: absolute; top: 20px; right: 20px;
+      color: #fff; z-index: 1000; background: rgba(255,255,255,0.3);
+      border: none; padding: 0.5rem; border-radius: 8px; transition: background-color 0.2s ease;
+    }
+    .hamburger:hover { background: rgba(255,255,255,0.5); }
+
+    .mobile-menu {
+      position: fixed; top: 0; right: -280px; width: 280px; height: 100%;
+      background: linear-gradient(180deg, #FF6B6B 0%, #FFE66D 50%, #4ECDC4 100%);
+      box-shadow: -4px 0 20px rgba(0,0,0,0.2); padding: 2rem 1.5rem;
+      display: flex; flex-direction: column; gap: 0.5rem;
+      transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 999; overflow-y: auto;
+    }
+    .mobile-menu a {
+      font-size: 1.1rem; color: #fff; padding: 0.8rem 0.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.3); transition: color 0.2s ease;
+      border-radius: 6px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+    .mobile-menu a:hover { background: rgba(255,255,255,0.3); }
+    .mobile-menu.open { right: 0; }
+
+    .menu-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.3); z-index: 998; opacity: 0;
+      pointer-events: none; transition: opacity 0.3s ease;
+    }
+    .menu-overlay.active { opacity: 1; pointer-events: auto; }
+
+    section {
+      background: #fff; padding: 1.8rem; border-radius: 20px; margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08); opacity: 0; transform: translateY(20px);
+      transition: 0.6s ease; border: 3px solid transparent;
+    }
+    section:nth-child(2) { border-color: #FF6B6B; }
+    section:nth-child(3) { border-color: #FFE66D; }
+    section:nth-child(4) { border-color: #4ECDC4; }
+    section:nth-child(5) { border-color: #FF6B6B; }
+    section.visible { opacity: 1; transform: translateY(0); }
+
+    h2 { color: #FF6B6B; margin-bottom: 1rem; }
+    ul { list-style: none; }
+    ul li { margin-bottom: 0.4rem; padding-right: 1.2rem; position: relative; font-size: 1.05rem; }
+    ul li::before { content: "★"; position: absolute; right: 0; color: #FFE66D; text-shadow: 1px 1px 0 #FF6B6B; }
+
+    /* Reviews Cards */
+    .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+    .review-card {
+      background: linear-gradient(135deg, #FFF9E6 0%, #fff 100%);
+      border-radius: 15px; padding: 1.2rem;
+      border-right: 4px solid #FFE66D;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .review-text { font-style: italic; color: #5D4037; margin-bottom: 0.8rem; line-height: 1.7; }
+    .review-author { font-weight: 600; color: #FF6B6B; text-align: left; }
+
+    .slider-container { position: relative; padding: 10px 0; }
+    .slider {
+      display: flex; overflow-x: auto; gap: 15px; scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch; padding: 10px 5px;
+    }
+    .slider::-webkit-scrollbar { height: 12px; }
+    .slider::-webkit-scrollbar-track { background: linear-gradient(90deg, #FF6B6B, #FFE66D, #4ECDC4); border-radius: 10px; }
+    .slider::-webkit-scrollbar-thumb { background: #fff; border-radius: 10px; border: 3px solid #4ECDC4; }
+
+    .slider img {
+      flex-shrink: 0; width: 280px; height: 200px; object-fit: cover; border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1); opacity: 0;
+      transition: opacity 0.5s ease, transform 0.3s ease; cursor: pointer; border: 4px solid #95E1D3;
+    }
+    .slider img.loaded { opacity: 1; }
+    .slider img:hover { transform: scale(1.05); border-color: #FFE66D; }
+
+    .slider-nav {
+      position: absolute; top: 50%; transform: translateY(-50%); width: 45px; height: 45px;
+      background: #FF6B6B; color: #fff; border: none; border-radius: 50%; font-size: 24px;
+      cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2); transition: background 0.3s;
+    }
+    .slider-nav:hover { background: #FFE66D; color: #FF6B6B; }
+    .slider-nav.prev { left: -5px; }
+    .slider-nav.next { right: -5px; }
+
+    .form-group { display: flex; flex-direction: column; margin-bottom: 1rem; }
+    .form-group label { color: #4ECDC4; font-weight: 600; margin-bottom: 5px; }
+    .form-group input, .form-group textarea {
+      padding: 0.6rem; border-radius: 15px; border: 2px solid #95E1D3; transition: border-color 0.3s;
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: #FFE66D; outline: none; }
+    .form-group input::placeholder, .form-group textarea::placeholder { color: #bbb; }
+    button.btn-primary { background: linear-gradient(135deg, #FF6B6B, #FFE66D); }
+    button.btn-primary:hover { background: linear-gradient(135deg, #FFE66D, #4ECDC4); }
+
+    footer { text-align: center; padding: 1.5rem; color: #fff;
+      background: linear-gradient(135deg, #4ECDC4, #95E1D3); border-radius: 20px 20px 0 0; }
+
+    .lightbox {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.9); z-index: 2000;
+      justify-content: center; align-items: center; cursor: pointer;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox img { max-width: 90%; max-height: 90%; border-radius: 15px; border: 5px solid #FFE66D; }
+    .lightbox-close {
+      position: absolute; top: 20px; right: 30px; font-size: 40px; color: #FFE66D;
+      cursor: pointer; transition: color 0.3s ease;
+    }
+    .lightbox-close:hover { color: #FF6B6B; }
+    
+    .lightbox-nav {
+      position: absolute; top: 50%; transform: translateY(-50%); width: 50px; height: 50px;
+      background: #FF6B6B; color: #fff; border: none; border-radius: 50%; font-size: 28px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3); transition: background 0.3s, transform 0.3s;
+      z-index: 2001;
+    }
+    .lightbox-nav:hover { background: #FFE66D; color: #FF6B6B; transform: translateY(-50%) scale(1.1); }
+    .lightbox-nav.prev { left: 20px; }
+    .lightbox-nav.next { right: 20px; }
+    .lightbox-nav:disabled { opacity: 0.3; cursor: not-allowed; }
+    .lightbox-nav:disabled:hover { background: #FF6B6B; color: #fff; transform: translateY(-50%); }
+
+    @media (max-width: 768px) {
+      .logo-title h1 { font-size: 1.6rem; }
+      .slider img { width: 220px; height: 160px; }
+      .container { padding: 1rem; }
+      header { padding: 2rem 1rem; }
+      section { padding: 1.5rem; }
+      .btn { padding: 0.8rem 1.6rem; font-size: 1rem; }
+      .hamburger { font-size: 2.2rem; padding: 0.6rem; }
+      .form-group { margin-bottom: 1.2rem; }
+      .form-group input, .form-group textarea { font-size: 1rem; }
+      .slider-nav { display: none; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .lightbox-nav { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .slider img { width: 180px; height: 130px; }
+      .hamburger { top: 15px; right: 15px; }
+      .logo-title h1 { font-size: 1.4rem; }
+      .logo-title p { font-size: 0.95rem; }
+      .hero-actions { gap: 0.5rem; }
+      .btn { padding: 0.7rem 1.4rem; font-size: 0.9rem; }
+      .mobile-menu { width: 260px; }
+      .mobile-menu a { font-size: 1rem; padding: 0.7rem 0.5rem; }
+    }
+
+    .btn:focus, .hamburger:focus, a:focus { outline: 3px solid #FFE66D; outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="container">
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
+
+    <nav id="mobileMenu" class="mobile-menu">
+      <a href="#about" onclick="closeMenu()">קצת עלי</a>
+      <a href="#reviews" onclick="closeMenu()">ביקורות-הורים ממליצים</a>
+      <a href="#gallery" onclick="closeMenu()">תמונות מהגן</a>
+      <a href="#register-form" onclick="closeMenu()">טופס רישום</a>
+    </nav>
+
+    <div id="menuOverlay" class="menu-overlay" onclick="toggleMenu()"></div>
+
+    <div class="logo-title">
+      <h1>עולם הילד – משפחתון ביתי</h1>
+      <p>לגילאי 3 חודשים ומעלה | עד 6 תינוקות בלבד</p>
+    </div>
+
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="https://wa.me/972509553456?text=שלום%20שירה%2C%20אשמח%20לשמוע%20פרטים">שליחת הודעת וואטסאפ</a>
+      <a class="btn btn-outline" href="#register-form">רישום למשפחתון</a>
+    </div>
+
+    <p dir="ltr" style="color: #fff; text-align: center; margin-top: 10px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">📞 Shira - 058-620-0242</p>
+  </div>
+</header>
+
+<main class="container">
+
+  <section>
+    <h2>מה מייחד את המשפחתון? 🌈</h2>
+    <ul>
+      <li>ליווי והדרכה התפתחותית־תנועתית מקצועית</li>
+      <li>עבודה אישית עם כל תינוק – בלי לחץ ובלי עומס</li>
+      <li>מעקב התפתחותי רציף ותומך</li>
+      <li>תזונה ביתית, מזינה ובריאה</li>
+      <li>קבוצה קטנה ואינטימית</li>
+      <li>הרבה חום, אהבה והקשבה</li>
+    </ul>
+  </section>
+
+  <section id="about">
+    <h2>הכירו את שירה 👩‍🏫</h2>
+    <p>
+      שירה
+מייסדת "עולם הילד בהדרכת שירה"
+מטפלת מוסמכת לגיל הרך, מדריכה להתפתחות תנועתית-התפתחותית, מדריכה לעיסוי תינוקות ומדריכה לריפוי בעיסוק.
+בעלת ניסיון של למעלה מ־25 שנה בתחום הגיל הרך.
+מלווה תינוקות ופעוטות בגישה אישית, רגישה ומקצועית, עם דגש על תנועה, מוטוריקה והתפתחות מותאמת לכל ילד וילדה.
+    </p>
+  </section>
+
+  <section id="reviews">
+    <h2>ביקורות - הורים ממליצים 💬</h2>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <p class="review-text">"שירה היא מטפלת מדהימה! הילדה שלנו התפתחה כל כך הרבה מאז שהתחילה להגיע אליה. היא מקצועית, סבלנית ואוהבת."</p>
+        <p class="review-author">— הורה של עלמא</p>
+      </div>
+      <div class="review-card">
+        <p class="review-text">"ממליצה בחום! אווירה מצוינת, תזונה בריאה והרבה אהבה. הילדה ממש אוהבת להגיע."</p>
+        <p class="review-author">— הורה של עמנואל</p>
+      </div>
+      <div class="review-card">
+        <p class="review-text">"שירה יודעת בדיוק איך להתייחס לכל ילד. הבן שלי מת לקפוץ לגן כל בוקר!"</p>
+        <p class="review-author">— הורה של ראם</p>
+      </div>
+      <div class="review-card">
+        <p class="review-text">"שירה מטפלת בחסד!"</p>
+        <p class="review-author">— הורה של עומר</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery">
+    <h2>תמונות מהגן 📸</h2>
+    <div class="slider-container">
+      <button class="slider-nav prev" onclick="slidePrev()">❮</button>
+      <div class="slider" id="gallerySlider">
+        <img data-src="img/1.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
+        <img data-src="img/2.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
+        <img data-src="img/3.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
+        <img data-src="img/4.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
+        <img data-src="img/5.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
+        <img data-src="img/6.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
+        <img data-src="img/7.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
+        <img data-src="img/8.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
+        <img data-src="img/9.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
+        <img data-src="img/10.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
+        <img data-src="img/11.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
+        <img data-src="img/12.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
+        <img data-src="img/13.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
+        <img data-src="img/14.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
+        <img data-src="img/15.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
+        <img data-src="img/16.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
+        <img data-src="img/17.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
+      </div>
+      <button class="slider-nav next" onclick="slideNext()">❯</button>
+    </div>
+  </section>
+
+  <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+    <span class="lightbox-close" onclick="closeLightbox(event)">&times;</span>
+    <button class="lightbox-nav prev" onclick="lightboxPrev(event)">❮</button>
+    <img id="lightbox-img" src="" alt="תמונה מוגדלת" onclick="event.stopPropagation()">
+    <button class="lightbox-nav next" onclick="lightboxNext(event)">❯</button>
+  </div>
+
+  <section id="register-form">
+    <h2>טופס רישום 📝</h2>
+    <form id="contactForm">
+      <div class="form-group">
+        <label>שם הילד/הילדים</label>
+        <input id="child" type="text" required placeholder="שם הילד/הילדים" />
+      </div>
+      <div class="form-group">
+        <label>שם ההורים</label>
+        <input id="parents" type="text" required placeholder="שם ההורים" />
+      </div>
+      <div class="form-group">
+        <label>גיל</label>
+        <input id="age" type="text" required placeholder="גיל הילד/ה" />
+      </div>
+      <div class="form-group">
+        <label>אלרגיות</label>
+        <input id="allergies" type="text" placeholder="אלרגיות (אם יש)" />
+      </div>
+      <div class="form-group">
+        <label>מורשי לקיחה</label>
+        <textarea id="authorized" placeholder="מי מורשה לקחת את הילד/ה"></textarea>
+      </div>
+      <div class="form-group">
+        <label>בקשות מיוחדות</label>
+        <textarea id="notes" placeholder="בקשות מיוחדות"></textarea>
+      </div>
+      <button class="btn btn-primary" type="submit">שלח</button>
+    </form>
+  </section>
+
+</main>
+
+<footer>
+  עולם הילד – משפחתון ביתי בגישה התפתחותית־תנועתית 🌟
+</footer>
+
+<script>
+function toggleMenu() {
+  const menu = document.getElementById("mobileMenu");
+  const overlay = document.getElementById("menuOverlay");
+  menu.classList.toggle("open");
+  overlay.classList.toggle("active");
+}
+
+function closeMenu() {
+  const menu = document.getElementById("mobileMenu");
+  const overlay = document.getElementById("menuOverlay");
+  menu.classList.remove("open");
+  overlay.classList.remove("active");
+}
+
+function slidePrev() {
+  document.getElementById("gallerySlider").scrollBy({ left: -300, behavior: "smooth" });
+}
+
+function slideNext() {
+  document.getElementById("gallerySlider").scrollBy({ left: 300, behavior: "smooth" });
+}
+
+let currentLightboxIndex = 0;
+const galleryImages = [];
+
+function openLightbox(imgElement) {
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+  
+  // Get all images from the gallery slider
+  const sliderImages = document.querySelectorAll("#gallerySlider img");
+  galleryImages.length = 0;
+  sliderImages.forEach((img, index) => {
+    galleryImages.push({
+      src: img.dataset.src || img.src,
+      element: img
+    });
+    if (img === imgElement) {
+      currentLightboxIndex = index;
+    }
+  });
+  
+  lightboxImg.src = imgElement.dataset.src || imgElement.src;
+  lightbox.classList.add("active");
+  document.body.style.overflow = "hidden";
+  updateLightboxNavButtons();
+}
+
+function closeLightbox(event) {
+  if (event) {
+    event.stopPropagation();
+  }
+  document.getElementById("lightbox").classList.remove("active");
+  document.body.style.overflow = "";
+}
+
+function lightboxPrev(event) {
+  if (event) {
+    event.stopPropagation();
+  }
+  if (galleryImages.length === 0) return;
+  
+  currentLightboxIndex = (currentLightboxIndex - 1 + galleryImages.length) % galleryImages.length;
+  document.getElementById("lightbox-img").src = galleryImages[currentLightboxIndex].src;
+  updateLightboxNavButtons();
+}
+
+function lightboxNext(event) {
+  if (event) {
+    event.stopPropagation();
+  }
+  if (galleryImages.length === 0) return;
+  
+  currentLightboxIndex = (currentLightboxIndex + 1) % galleryImages.length;
+  document.getElementById("lightbox-img").src = galleryImages[currentLightboxIndex].src;
+  updateLightboxNavButtons();
+}
+
+function updateLightboxNavButtons() {
+  const prevBtn = document.querySelector(".lightbox-nav.prev");
+  const nextBtn = document.querySelector(".lightbox-nav.next");
+  
+  // Enable/disable buttons based on gallery size (optional - can always navigate)
+  if (prevBtn) prevBtn.disabled = false;
+  if (nextBtn) nextBtn.disabled = false;
+}
+
+document.addEventListener("keydown", function(e) {
+  const lightbox = document.getElementById("lightbox");
+  if (!lightbox.classList.contains("active")) return;
+  
+  if (e.key === "Escape") {
+    closeLightbox();
+  } else if (e.key === "ArrowLeft") {
+    lightboxPrev(e);
+  } else if (e.key === "ArrowRight") {
+    lightboxNext(e);
+  }
+});
+
+const lazyImages = document.querySelectorAll("img[data-src]");
+const imageObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const img = entry.target;
+      const newImg = new Image();
+      newImg.src = img.dataset.src;
+      newImg.onload = () => { img.src = newImg.src; img.classList.add("loaded"); observer.unobserve(img); };
+      newImg.onerror = () => { img.style.backgroundColor = "#f0f0f0"; observer.unobserve(img); };
+    }
+  });
+}, { rootMargin: '50px 0px', threshold: 0.1 });
+lazyImages.forEach(img => imageObserver.observe(img));
+
+const sections = document.querySelectorAll("section");
+const sectionObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add("visible"); });
+});
+sections.forEach(sec => sectionObserver.observe(sec));
+
+document.getElementById("contactForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const message = `הרשמה למשפחתון עולם הילד:\n` +
+    `שם הילד/ים: ${document.getElementById("child").value}\n` +
+    `שם ההורים: ${document.getElementById("parents").value}\n` +
+    `גיל: ${document.getElementById("age").value}\n` +
+    `אלרגיות: ${document.getElementById("allergies").value}\n` +
+    `מורשי לקיחה: ${document.getElementById("authorized").value}\n` +
+    `בקשות מיוחדות: ${document.getElementById("notes").value}`;
+  window.open(`https://wa.me/972586200242?text=${encodeURIComponent(message)}`, "_blank");
+  alert("הטופס נשלח לוואטסאפ");
+});
+</script>
+
+</body>
+</html>

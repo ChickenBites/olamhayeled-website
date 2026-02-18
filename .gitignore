@@ -1,0 +1,20 @@
+# Ignore large image files if needed
+# img/
+
+# Ignore node_modules if any
+node_modules/
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
