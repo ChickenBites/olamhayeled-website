@@ -282,23 +282,7 @@
     <div class="slider-container">
       <button class="slider-nav prev" onclick="slidePrev()">❮</button>
       <div class="slider" id="gallerySlider">
-        <img data-src="img/1.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
-        <img data-src="img/2.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
-        <img data-src="img/3.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
-        <img data-src="img/4.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
-        <img data-src="img/5.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
-        <img data-src="img/6.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
-        <img data-src="img/7.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
-        <img data-src="img/8.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
-        <img data-src="img/9.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
-        <img data-src="img/10.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
-        <img data-src="img/11.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
-        <img data-src="img/12.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
-        <img data-src="img/13.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
-        <img data-src="img/14.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
-        <img data-src="img/15.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
-        <img data-src="img/16.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
-        <img data-src="img/17.jpeg" alt="תמונה מהגן" onclick="openLightbox(this)">
+        <!-- Images will be loaded dynamically from img folder -->
       </div>
       <button class="slider-nav next" onclick="slideNext()">❯</button>
     </div>
@@ -349,6 +333,54 @@
 </footer>
 
 <script>
+// Dynamically load images from img folder
+async function loadGalleryImages() {
+  const slider = document.getElementById('gallerySlider');
+  const maxImages = 100; // Check up to 100 images
+  
+  // We'll try to load images 1, 2, 3... and check if they exist
+  for (let i = 1; i <= maxImages; i++) {
+    const img = document.createElement('img');
+    const imgSrc = `img/${i}.jpeg`;
+    
+    // Check if image exists by trying to load it
+    try {
+      const response = await fetch(imgSrc, { method: 'HEAD' });
+      if (response.ok) {
+        img.dataset.src = imgSrc;
+        img.alt = 'תמונה מהגן';
+        img.onclick = function() { openLightbox(this); };
+        slider.appendChild(img);
+      }
+    } catch (e) {
+      // Image doesn't exist, stop checking
+      break;
+    }
+  }
+  
+  // Initialize lazy loading for dynamically added images
+  initLazyLoading();
+}
+
+function initLazyLoading() {
+  const lazyImages = document.querySelectorAll("#gallerySlider img[data-src]");
+  const imageObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        const newImg = new Image();
+        newImg.src = img.dataset.src;
+        newImg.onload = () => { img.src = newImg.src; img.classList.add("loaded"); observer.unobserve(img); };
+        newImg.onerror = () => { img.style.backgroundColor = "#f0f0f0"; observer.unobserve(img); };
+      }
+    });
+  }, { rootMargin: '50px 0px', threshold: 0.1 });
+  lazyImages.forEach(img => imageObserver.observe(img));
+}
+
+// Load images when page loads
+document.addEventListener('DOMContentLoaded', loadGalleryImages);
+
 function toggleMenu() {
   const menu = document.getElementById("mobileMenu");
   const overlay = document.getElementById("menuOverlay");
