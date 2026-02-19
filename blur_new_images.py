@@ -217,11 +217,9 @@ def save_blurred_list(blurred):
         for num in sorted(blurred):
             f.write(f"{num}\n")
 
-
 def main():
     base = Path(__file__).parent
     img_dir = base / "img"
-    tracker_file = base_dir / "img" / "blurred_images.txt"
     
     # Load already blurred images
     blurred_images = load_blurred_list()
@@ -229,7 +227,7 @@ def main():
     
     # Find all jpeg images in img folder
     new_images = []
-    for i in range(1, 1000):  # Check up to 1000 images
+    for i in range(1, 1000):
         img_path = img_dir / f"{i}.jpeg"
         if img_path.exists() and i not in blurred_images:
             new_images.append(i)
@@ -259,18 +257,14 @@ def main():
         for (x, y, w, h) in faces:
             blur_region(img, x, y, w, h)
         
-        # Save over original
         cv2.imwrite(str(img_path), img)
         print(f"  Saved")
         
-        # Add to blurred list
         blurred_images.add(img_num)
     
-    # Update tracker file
     save_blurred_list(blurred_images)
     
     print(f"\nDone! {len(new_images)} images blurred and saved.")
-
 
 if __name__ == "__main__":
     main()
