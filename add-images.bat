@@ -1,52 +1,52 @@
 @echo off
 echo ========================================
-echo    העלאת תמונות לאתר עולם הילד
+echo        Uploading Images to Website
 echo ========================================
 echo.
 
 :: Check if git is installed
 where git >nul 2>nul
 if %errorlevel% neq 0 (
-    echo שגיאה: לא התקנת את Git
-    echo אנא התקן את Git קודם מהאתר: https://git-scm.com
+    echo ERROR: Git is not installed
+    echo Please install Git first from: https://git-scm.com
     pause
     exit /b 1
 )
 
-echo שלב 1: מוסיף תמונות ל-Git...
+echo Step 1: Adding images to Git...
 git add .
 if %errorlevel% neq 0 (
-    echo שגיאה בהוספת קבצים
+    echo Error while adding files
     pause
     exit /b 1
 )
 
 echo.
-echo שלב 2: שומר שינויים...
-set /p commitmsg="הכנס תיאור לשינויים (למשל: הוספת תמונות חדשות): "
-if "%commitmsg%"=="" set commitmsg=הוספת תמונות חדשות
+echo Step 2: Saving changes...
+set /p commitmsg="Enter a description for the changes (e.g., added new images): "
+if "%commitmsg%"=="" set commitmsg=Added new images
 
 git commit -m "%commitmsg%"
 if %errorlevel% neq 0 (
-    echo שגיאה בשמירה
+    echo Error while committing changes
     pause
     exit /b 1
 )
 
 echo.
-echo שלב 3: מעלה לאינטרנט...
+echo Step 3: Uploading to the internet...
 git push
 if %errorlevel% neq 0 (
-    echo שגיאה בהעלאה
+    echo Error while uploading
     pause
     exit /b 1
 )
 
 echo.
 echo ========================================
-echo הצלחה! התמונות עלו לאינטרנט
+echo SUCCESS! Images have been uploaded
 echo ========================================
-echo כתובת האתר: https://olamhayeled.netlify.app
+echo Website URL: https://olamhayeled.netlify.app
 echo.
-echo הערה: יכול לקחת כמה דקות עד שהאתר יתעדכן
+echo Note: It may take a few minutes for the site to update
 pause
