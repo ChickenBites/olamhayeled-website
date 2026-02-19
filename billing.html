@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>תשלומים - עולם הילד</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="ניהול תשלומים - תשלום חודשי של 3500 ₪" />
+  
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Alef","Assistant",Arial,sans-serif; }
+    body { background: #FFF9E6; color: #5D4037; line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
+    
+    .container { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
+    
+    header {
+      background: linear-gradient(135deg, #FF6B6B, #FFE66D, #4ECDC4, #95E1D3);
+      background-size: 300% 300%;
+      animation: rainbow 10s ease infinite;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    header h1 { color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+    header p { color: #fff; font-weight: 500; text-shadow: 1px 1px 3px rgba(0,0,0,0.2); }
+    
+    .back-link {
+      display: inline-block;
+      margin-bottom: 1rem;
+      color: #4ECDC4;
+      font-weight: 600;
+    }
+    
+    .back-link:hover { color: #FF6B6B; }
+    
+    .payment-summary {
+      background: linear-gradient(135deg, #4ECDC4, #95E1D3);
+      padding: 1.5rem;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      color: #fff;
+      text-align: center;
+    }
+    
+    .payment-amount {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin: 0.5rem 0;
+    }
+    
+    .payment-frequency {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+    
+    .section {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 20px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+    
+    h2 { color: #FF6B6B; margin-bottom: 1rem; }
+    h3 { color: #4ECDC4; margin-bottom: 0.8rem; }
+    
+    .payment-type-selector {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .payment-type-btn {
+      flex: 1;
+      padding: 1rem;
+      border: 2px solid #ddd;
+      border-radius: 15px;
+      background: #fff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+    
+    .payment-type-btn:hover { border-color: #4ECDC4; }
+    .payment-type-btn.active {
+      border-color: #FF6B6B;
+      background: #FFF5F5;
+    }
+    
+    .payment-type-btn .icon { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+    .payment-type-btn .label { font-weight: 600; color: #5D4037; }
+    
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { 
+      display: block; 
+      color: #4ECDC4; 
+      font-weight: 600; 
+      margin-bottom: 5px; 
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 10px;
+      border: 2px solid #95E1D3;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      border-color: #FFE66D;
+      outline: none;
+    }
+    .form-group input.error { border-color: #FF6B6B; }
+    .form-group .error-msg { color: #FF6B6B; font-size: 0.85rem; display: none; }
+    .form-group.has-error .error-msg { display: block; }
+    
+    .form-row { display: flex; gap: 1rem; }
+    .form-row .form-group { flex: 1; }
+    
+    .btn {
+      padding: 1rem 2rem;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-size: 1rem;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .btn-primary { 
+      background: linear-gradient(135deg, #FF6B6B, #FFE66D); 
+      color: #fff;
+      width: 100%;
+    }
+    .btn-secondary { 
+      background: #4ECDC4; 
+      color: #fff;
+    }
+    .btn-outline {
+      border: 2px solid #4ECDC4;
+      color: #4ECDC4;
+      background: transparent;
+    }
+    
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    
+    .payment-form { display: none; }
+    .payment-form.active { display: block; }
+    
+    .success-message {
+      background: #D4EDDA;
+      border: 2px solid #28A745;
+      color: #155724;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .success-message.show { display: block; }
+    
+    .error-message {
+      background: #F8D7DA;
+      border: 2px solid #DC3545;
+      color: #721C24;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .error-message.show { display: block; }
+    
+    .customer-info {
+      background: #F8F9FA;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+    }
+    
+    .customer-info h3 { margin-bottom: 0.5rem; }
+    
+    .card-icons {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .card-icon {
+      padding: 0.3rem 0.6rem;
+      border-radius: 5px;
+      font-size: 0.8rem;
+      background: #eee;
+      color: #666;
+    }
+    .card-icon.visa { background: #1A1F71; color: #fff; }
+    .card-icon.mastercard { background: #EB001B; color: #fff; }
+    .card-icon.isracard { background: #0066B3; color: #fff; }
+    
+    .standing-order-note {
+      background: #FFF3CD;
+      border: 2px solid #FFC107;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+    
+    .bank-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .bank-option {
+      padding: 0.5rem;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .bank-option:hover { border-color: #4ECDC4; }
+    .bank-option.selected { border-color: #FF6B6B; background: #FFF5F5; }
+    
+    .hidden { display: none !important; }
+    
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: #5D4037;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 600px) {
+      .payment-type-selector { flex-direction: column; }
+      .form-row { flex-direction: column; }
+      .bank-list { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <h1>💰 תשלומים - עולם הילד</h1>
+    <p>משפחתון ביתי בגישה התפתחותית-תנועתית</p>
+  </div>
+</header>
+
+<main class="container">
+  <a href="index.html" class="back-link">← חזרה לדף הבית</a>
+  
+  <!-- Success/Error Messages -->
+  <div id="successMessage" class="success-message"></div>
+  <div id="errorMessage" class="error-message"></div>
+  
+  <!-- Payment Summary -->
+  <div class="payment-summary">
+    <div>תשלום חודשי</div>
+    <div class="payment-amount">₪3,500</div>
+    <div class="payment-frequency">משפחתון עולם הילד</div>
+  </div>
+  
+  <!-- Customer Registration -->
+  <section class="section" id="customerSection">
+    <h2>👤 פרטי הורה וילד</h2>
+    <form id="customerForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label>שם ההורה *</label>
+          <input type="text" id="parentName" required placeholder="שם מלא" />
+        </div>
+        <div class="form-group">
+          <label>טלפון *</label>
+          <input type="tel" id="phone" required placeholder="05X-XXX-XXXX" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>אימייל</label>
+          <input type="email" id="email" placeholder="email@example.com" />
+        </div>
+        <div class="form-group">
+          <label>שם הילד/ה *</label>
+          <input type="text" id="childName" required placeholder="שם הילד/ה" />
+        </div>
+      </div>
+    </form>
+  </section>
+  
+  <!-- Payment Method Selection -->
+  <section class="section" id="paymentSection">
+    <h2>💳 בחירת אמצעי תשלום</h2>
+    
+    <div class="payment-type-selector">
+      <button type="button" class="payment-type-btn active" data-type="credit_card">
+        <span class="icon">💳</span>
+        <span class="label">כרטיס אשראי</span>
+      </button>
+      <button type="button" class="payment-type-btn" data-type="standing_order">
+        <span class="icon">🏦</span>
+        <span class="label">הוראת קבע</span>
+      </button>
+    </div>
+    
+    <!-- Credit Card Form -->
+    <div id="creditCardForm" class="payment-form active">
+      <h3>פרטי כרטיס אשראי</h3>
+      
+      <div class="card-icons">
+        <span class="card-icon visa">Visa</span>
+        <span class="card-icon mastercard">Mastercard</span>
+        <span class="card-icon isracard">Isracard</span>
+      </div>
+      
+      <form id="ccForm">
+        <div class="form-group">
+          <label>מספר כרטיס *</label>
+          <input type="text" id="cardNumber" maxlength="19" placeholder="XXXX XXXX XXXX XXXX" required />
+          <span class="error-msg">מספר כרטיס לא תקין</span>
+        </div>
+        
+        <div class="form-group">
+          <label>שם בעל הכרטיס *</label>
+          <input type="text" id="cardHolder" placeholder="שם כפי שמופיע על הכרטיס" required />
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>חודש *</label>
+            <select id="cardMonth" required>
+              <option value="">חודש</option>
+              <option value="01">01</option>
+              <option value="02">02</option>
+              <option value="03">03</option>
+              <option value="04">04</option>
+              <option value="05">05</option>
+              <option value="06">06</option>
+              <option value="07">07</option>
+              <option value="08">08</option>
+              <option value="09">09</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>שנה *</label>
+            <select id="cardYear" required>
+              <option value="">שנה</option>
+              <option value="2025">2025</option>
+              <option value="2026">2026</option>
+              <option value="2027">2027</option>
+              <option value="2028">2028</option>
+              <option value="2029">2029</option>
+              <option value="2030">2030</option>
+              <option value="2031">2031</option>
+              <option value="2032">2032</option>
+              <option value="2033">2033</option>
+              <option value="2034">2034</option>
+              <option value="2035">2035</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>CVV *</label>
+            <input type="text" id="cardCvv" maxlength="4" placeholder="XXX" required />
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>תאריך תחילת הוראת הקבע *</label>
+          <input type="date" id="startDate" required />
+        </div>
+        
+        <button type="submit" class="btn btn-primary" id="submitCCBtn">
+          הרשם לתשלום חודשי
+        </button>
+      </form>
+    </div>
+    
+    <!-- Standing Order Form -->
+    <div id="standingOrderForm" class="payment-form">
+      <h3>פרטי הוראת קבע (דביט)</h3>
+      
+      <div class="standing-order-note">
+        📝 <strong>הוראת קבע</strong> - התשלום יגבה אוטומטית מהחשבון שלך בכל חודש.
+        יש למלא את פרטי החשבון הבנקאי כפי שמופיעים בספר החשבונות.
+      </div>
+      
+      <div class="bank-list">
+        <div class="bank-option selected" data-bank="001">בנק לאומי</div>
+        <div class="bank-option" data-bank="004">בנק מזרחי</div>
+        <div class="bank-option" data-bank="007">בנק דיסקונט</div>
+        <div class="bank-option" data-bank="010">בנק הפועלים</div>
+        <div class="bank-option" data-bank="012">בנק יהב</div>
+        <div class="bank-option" data-bank="013">בנק ירושלים</div>
+        <div class="bank-option" data-bank="014">בנק אגוד</div>
+        <div class="bank-option" data-bank="020">בנק מרכנתיל</div>
+        <div class="bank-option" data-bank="022">בנק מסד</div>
+      </div>
+      
+      <form id="soForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label>קובץ בנק *</label>
+            <input type="text" id="bankCode" placeholder="XXX" maxlength="3" required />
+          </div>
+          <div class="form-group">
+            <label>מספר סניף *</label>
+            <input type="text" id="branchCode" placeholder="XXX" maxlength="3" required />
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>מספר חשבון *</label>
+          <input type="text" id="accountNumber" placeholder="מספר חשבון (עד 9 ספרות)" maxlength="9" required />
+        </div>
+        
+        <div class="form-group">
+          <label>שם בעל החשבון *</label>
+          <input type="text" id="accountHolder" placeholder="שם מלא כפי שמופיע בחשבון" required />
+        </div>
+        
+        <div class="form-group">
+          <label>תאריך תחילת הוראת הקבע *</label>
+          <input type="date" id="soStartDate" required />
+        </div>
+        
+        <button type="submit" class="btn btn-primary" id="submitSOBtn">
+          הרשם לתשלום חודשי
+        </button>
+      </form>
+    </div>
+  </section>
+  
+  <!-- Confirmation Section (Hidden initially) -->
+  <section class="section hidden" id="confirmationSection">
+    <h2>✅ הרישום הושלם</h2>
+    <div id="confirmationContent"></div>
+  </section>
+
+</main>
+
+<footer>
+  <p>© 2024 עולם הילד - משפחתון ביתי | כל הזכויות שמורות</p>
+  <p>💳 תשלום מאובטח | 🔒 מוגן בפרוטוקול SSL</p>
+</footer>
+
+<script>
+// Configuration
+const MONTHLY_AMOUNT = 3500;
+const API_BASE = ''; // Same origin
+
+// State
+let customerId = null;
+let selectedPaymentType = 'credit_card';
+
+// DOM Elements
+const successMsg = document.getElementById('successMessage');
+const errorMsg = document.getElementById('errorMessage');
+const paymentTypeBtns = document.querySelectorAll('.payment-type-btn');
+const creditCardForm = document.getElementById('creditCardForm');
+const standingOrderForm = document.getElementById('standingOrderForm');
+const bankOptions = document.querySelectorAll('.bank-option');
+const ccForm = document.getElementById('ccForm');
+const soForm = document.getElementById('soForm');
+const confirmationSection = document.getElementById('confirmationSection');
+const confirmationContent = document.getElementById('confirmationContent');
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  // Set default start date to today
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('startDate').value = today;
+  document.getElementById('soStartDate').value = today;
+  
+  // Set minimum date to today
+  document.getElementById('startDate').min = today;
+  document.getElementById('soStartDate').min = today;
+});
+
+// Payment type selection
+paymentTypeBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    paymentTypeBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedPaymentType = btn.dataset.type;
+    
+    if (selectedPaymentType === 'credit_card') {
+      creditCardForm.classList.add('active');
+      standingOrderForm.classList.remove('active');
+    } else {
+      creditCardForm.classList.remove('active');
+      standingOrderForm.classList.add('active');
+    }
+  });
+});
+
+// Bank selection
+bankOptions.forEach(opt => {
+  opt.addEventListener('click', () => {
+    bankOptions.forEach(b => b.classList.remove('selected'));
+    opt.classList.add('selected');
+    document.getElementById('bankCode').value = opt.dataset.bank;
+  });
+});
+
+// Format card number input
+document.getElementById('cardNumber').addEventListener('input', (e) => {
+  let value = e.target.value.replace(/\D/g, '');
+  value = value.replace(/(\d{4})/g, '$1 ').trim();
+  e.target.value = value;
+});
+
+// Credit Card Form Submit
+ccForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const btn = document.getElementById('submitCCBtn');
+  btn.disabled = true;
+  btn.innerHTML = 'מעבד... <span class="spinner"></span>';
+  
+  hideMessages();
+  
+  try {
+    // Step 1: Register customer
+    const customerData = {
+      parent_name: document.getElementById('parentName').value,
+      phone: document.getElementById('phone').value,
+      email: document.getElementById('email').value,
+      child_name: document.getElementById('childName').value
+    };
+    
+    let customerResponse = await fetch(API_BASE + '/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(customerData)
+    });
+    
+    let customerResult = await customerResponse.json();
+    
+    if (!customerResult.success) {
+      throw new Error(customerResult.error || 'Registration failed');
+    }
+    
+    customerId = customerResult.customer_id;
+    
+    // Step 2: Add credit card
+    const cardData = {
+      customer_id: customerId,
+      card_number: document.getElementById('cardNumber').value.replace(/\s/g, ''),
+      card_holder_name: document.getElementById('cardHolder').value,
+      expiry_month: document.getElementById('cardMonth').value,
+      expiry_year: document.getElementById('cardYear').value,
+      cvv: document.getElementById('cardCvv').value,
+      is_default: true
+    };
+    
+    let cardResponse = await fetch(API_BASE + '/api/add-credit-card', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(cardData)
+    });
+    
+    let cardResult = await cardResponse.json();
+    
+    if (!cardResult.success) {
+      throw new Error(cardResult.error || 'Failed to add card');
+    }
+    
+    // Step 3: Create recurring payment
+    const recurringData = {
+      customer_id: customerId,
+      payment_method_id: cardResult.method_id,
+      amount: MONTHLY_AMOUNT,
+      start_date: document.getElementById('startDate').value,
+      frequency: 'monthly'
+    };
+    
+    let recurringResponse = await fetch(API_BASE + '/api/create-recurring', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(recurringData)
+    });
+    
+    let recurringResult = await recurringResponse.json();
+    
+    if (!recurringResult.success) {
+      throw new Error(recurringResult.error || 'Failed to create recurring payment');
+    }
+    
+    // Show success
+    showSuccess(`
+      <h3>🎉 הרישום הושלם בהצלחה!</h3>
+      <p>נוצר תשלום חודשי של <strong>₪${MONTHLY_AMOUNT.toLocaleString()}</strong></p>
+      <p>התשלום יתבצע באופן אוטומטי מדי חודש החל מתאריך <strong>${formatDate(document.getElementById('startDate').value)}</strong></p>
+      <p>פרטי התשלום:</p>
+      <ul style="text-align: right; margin: 10px 0;">
+        <li>סוג תשלום: כרטיס אשראי</li>
+        <li>מספר כרטיס: **** ${cardResult.last4}</li>
+        <li>מספר לקוח: ${customerId}</li>
+      </ul>
+      <p style="margin-top: 15px;">תודה רבה! 🧒💕</p>
+    `);
+    
+    confirmationSection.classList.remove('hidden');
+    
+  } catch (error) {
+    showError(error.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'הרשם לתשלום חודשי';
+  }
+});
+
+// Standing Order Form Submit
+soForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const btn = document.getElementById('submitSOBtn');
+  btn.disabled = true;
+  btn.innerHTML = 'מעבד... <span class="spinner"></span>';
+  
+  hideMessages();
+  
+  try {
+    // Step 1: Register customer
+    const customerData = {
+      parent_name: document.getElementById('parentName').value,
+      phone: document.getElementById('phone').value,
+      email: document.getElementById('email').value,
+      child_name: document.getElementById('childName').value
+    };
+    
+    let customerResponse = await fetch(API_BASE + '/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(customerData)
+    });
+    
+    let customerResult = await customerResponse.json();
+    
+    if (!customerResult.success) {
+      throw new Error(customerResult.error || 'Registration failed');
+    }
+    
+    customerId = customerResult.customer_id;
+    
+    // Step 2: Add standing order
+    const soData = {
+      customer_id: customerId,
+      bank_code: document.getElementById('bankCode').value,
+      branch_code: document.getElementById('branchCode').value,
+      account_number: document.getElementById('accountNumber').value,
+      account_holder_name: document.getElementById('accountHolder').value,
+      is_default: true
+    };
+    
+    let soResponse = await fetch(API_BASE + '/api/add-standing-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(soData)
+    });
+    
+    let soResult = await soResponse.json();
+    
+    if (!soResult.success) {
+      throw new Error(soResult.error || 'Failed to add standing order');
+    }
+    
+    // Step 3: Create recurring payment
+    const recurringData = {
+      customer_id: customerId,
+      payment_method_id: soResult.method_id,
+      amount: MONTHLY_AMOUNT,
+      start_date: document.getElementById('soStartDate').value,
+      frequency: 'monthly'
+    };
+    
+    let recurringResponse = await fetch(API_BASE + '/api/create-recurring', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(recurringData)
+    });
+    
+    let recurringResult = await recurringResponse.json();
+    
+    if (!recurringResult.success) {
+      throw new Error(recurringResult.error || 'Failed to create recurring payment');
+    }
+    
+    // Show success
+    showSuccess(`
+      <h3>🎉 הרישום הושלם בהצלחה!</h3>
+      <p>נוצרה הוראת קבע חודשית של <strong>₪${MONTHLY_AMOUNT.toLocaleString()}</strong></p>
+      <p>התשלום יגבה אוטומטית מהחשבון שלך החל מתאריך <strong>${formatDate(document.getElementById('soStartDate').value)}</strong></p>
+      <p>פרטי התשלום:</p>
+      <ul style="text-align: right; margin: 10px 0;">
+        <li>סוג תשלום: הוראת קבע (דביט)</li>
+        <li>בנק: ${document.getElementById('bankCode').value}</li>
+        <li>סניף: ${document.getElementById('branchCode').value}</li>
+        <li>חשבון: ****${document.getElementById('accountNumber').value.slice(-4)}</li>
+      </ul>
+      <p style="margin-top: 15px;">תודה רבה! 🧒💕</p>
+    `);
+    
+    confirmationSection.classList.remove('hidden');
+    
+  } catch (error) {
+    showError(error.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'הרשם לתשלום חודשי';
+  }
+});
+
+// Helper functions
+function showSuccess(message) {
+  successMsg.innerHTML = message;
+  successMsg.classList.add('show');
+  errorMsg.classList.remove('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showError(message) {
+  errorMsg.textContent = message;
+  errorMsg.classList.add('show');
+  successMsg.classList.remove('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function hideMessages() {
+  successMsg.classList.remove('show');
+  errorMsg.classList.remove('show');
+}
+
+function formatDate(dateStr) {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('he-IL', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  });
+}
+</script>
+
+</body>
+</html>

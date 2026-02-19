@@ -1,0 +1,15 @@
+[build]
+  command = ""
+  functions = "netlify/functions"
+  publish = "."
+
+[dev]
+  command = "python3 server.py"
+  targetPort = 8000
+  port = 8888
+
+# Redirects for SPA (Single Page App)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
