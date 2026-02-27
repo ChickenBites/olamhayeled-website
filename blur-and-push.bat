@@ -13,7 +13,22 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-echo Step 1: Blurring faces in new images...
+echo Step 1: Fetching latest changes from server...
+git fetch origin
+if %errorlevel% neq 0 (
+    echo WARNING: Failed to fetch latest changes
+)
+
+echo.
+echo Step 2: Pulling latest changes...
+git pull origin main
+if %errorlevel% neq 0 (
+    echo WARNING: Failed to pull latest changes
+    echo Continuing anyway...
+)
+
+echo.
+echo Step 3: Blurring faces in new images...
 python blur_new_images.py
 if %errorlevel% neq 0 (
     echo ERROR: Failed to blur images
@@ -23,7 +38,7 @@ if %errorlevel% neq 0 (
 )
 
 echo.
-echo Step 2: Adding images to Git...
+echo Step 4: Adding images to Git...
 git add .
 if %errorlevel% neq 0 (
     echo ERROR: Failed to add files
@@ -32,7 +47,7 @@ if %errorlevel% neq 0 (
 )
 
 echo.
-echo Step 3: Saving changes...
+echo Step 5: Saving changes...
 set /p commitmsg="Enter a description for the changes (e.g., added new images): "
 if "%commitmsg%"=="" set commitmsg=Added new images
 
@@ -44,7 +59,7 @@ if %errorlevel% neq 0 (
 )
 
 echo.
-echo Step 4: Uploading to the internet...
+echo Step 6: Uploading to the internet...
 git push
 if %errorlevel% neq 0 (
     echo ERROR: Failed to upload
